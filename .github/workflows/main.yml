@@ -39,14 +39,16 @@ jobs:
 
       - name: Create User with Custom Password
         run: |
-          $pw = "helloW0rld*"
+          $un = ${{ secrets.WINDOWS_USERNAME }}
+          $pw = ${{ secrets.WINDOWS_PASSWORD }}
+          $secureUsername = ConvertTo-SecureString $un -AsPlainText -Force
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
           
-          New-LocalUser -Name "gopher" -Password $securePass -AccountNeverExpires
-          Add-LocalGroupMember -Group "Administrators" -Member "gopher"
-          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "gopher"
+          New-LocalUser -Name $secureUsername -Password $securePass -AccountNeverExpires
+          Add-LocalGroupMember -Group "Administrators" -Member $secureUsername
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member $secureUsername
           
-          if (-not (Get-LocalUser -Name "gopher")) {
+          if (-not (Get-LocalUser -Name $secureUsername)) {
               Write-Error "Error creating user"
               exit 1
           }
@@ -94,12 +96,7 @@ jobs:
 
       - name: Maintain Connection
         run: |
-          Write-Host "`n=================================================="
-          Write-Host "Connection details:"
-          Write-Host "address: $env:TAILSCALE_IP"
-          Write-Host "user: gopher"
-          Write-Host "pw: helloW0rld*"
-          Write-Host "==================================================`n"
+          Write-Host "Connection estabilished. Check Tailscale admin console."
           
           $endTime = (Get-Date).AddMinutes(350)
           do {

@@ -51,44 +51,6 @@ jobs:
               exit 1
           }
 
-
-      - name: Install Brave Browser
-        shell: powershell
-        run: |
-          $ErrorActionPreference = "Stop"
-      
-          $release = Invoke-RestMethod `
-            -Uri "https://api.github.com/repos/brave/brave-browser/releases/latest" `
-            -Headers @{
-              "User-Agent" = "GitHub-Actions"
-            }
-      
-          $version = $release.tag_name
-          $braveUrl = "https://github.com/brave/brave-browser/releases/download/$version/BraveBrowserSetup.exe"
-          $installerPath = "$env:TEMP\brave.exe"
-      
-          Write-Host "Latest Brave: $version"
-          Write-Host "Downloading: $braveUrl"
-      
-          Invoke-WebRequest `
-            -Uri $braveUrl `
-            -OutFile $installerPath
-      
-          Write-Host "Installing..."
-      
-          $process = Start-Process `
-            -FilePath $installerPath `
-            -ArgumentList "/silent", "/install" `
-            -Wait `
-            -PassThru
-      
-          if ($process.ExitCode -ne 0) {
-            throw "Brave installer failed with exit code $($process.ExitCode)."
-          }
-      
-          Remove-Item $installerPath -Force
-          Write-Host "Brave Browser installed succesfully."
-
       - name: Install Tailscale
         run: |
           $tsUrl = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"

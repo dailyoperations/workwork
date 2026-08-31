@@ -43,6 +43,7 @@ jobs:
           WINDOWS_USERNAME: ${{ secrets.WINDOWS_USERNAME }}
           WINDOWS_PASSWORD: ${{ secrets.WINDOWS_PASSWORD }}
         run: |
+          net accounts
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
       
@@ -59,7 +60,7 @@ jobs:
       
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
       
-          New-LocalUser -Name $env:WINDOWS_USERNAME -Password $securePass -AccountNeverExpires
+          New-LocalUser -Name $un -Password $securePass -AccountNeverExpires
       
           Add-LocalGroupMember -Group "Administrators" -Member $un
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member $un

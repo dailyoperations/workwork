@@ -44,7 +44,7 @@ jobs:
         run: |
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
-          $securePass = ConvertTo-SecureString ${{ secrets.WINDOWS_PASSWORD }} -AsPlainText -Force
+          $securePass = ConvertTo-SecureString 'epic' -AsPlainText -Force
          
           New-LocalUser -Name $un -Password $securePass -AccountNeverExpires
           

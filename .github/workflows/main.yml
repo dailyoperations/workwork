@@ -50,7 +50,7 @@ jobs:
           $fromLiteral = ConvertTo-SecureString 'epic' -AsPlainText -Force
       
           Write-Host "Secret length: $($env:WINDOWS_PASSWORD.Length)"
-          Write-Host "Same plaintext: $($env:WINDOWS_PASSWORD -ceq 'helloMund0*')"
+          Write-Host "Same plaintext: $($env:WINDOWS_PASSWORD -ceq 'epic')"
           
           if ([string]::IsNullOrWhiteSpace($un)) {
               throw "WINDOWS_USERNAME secret is empty"

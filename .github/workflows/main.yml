@@ -45,7 +45,7 @@ jobs:
         run: |
           net accounts
           $un = $env:WINDOWS_USERNAME
-          $pw = 'helloG00mb4*'
+          $pw = $env:WINDOWS_PASSWORD
       
           if ([string]::IsNullOrWhiteSpace($un)) {
               throw "WINDOWS_USERNAME secret is empty"

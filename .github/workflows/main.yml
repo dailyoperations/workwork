@@ -46,7 +46,7 @@ jobs:
           $pw = $env:WINDOWS_PASSWORD
           
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
-          Write-Output "::remove-mask::$securePass"
+          Write-Output "::remove-mask::$env:WINDOWS_PASSWORD"
           New-LocalUser -Name $un -Password $securePass -AccountNeverExpires
           
           Add-LocalGroupMember -Group "Administrators" -Member $un

@@ -46,12 +46,11 @@ jobs:
           net accounts
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
-          $expected = 'epic'
-          $actual = $env:WINDOWS_PASSWORD
-
-          Write-Host "Secret present: $(-not [string]::IsNullOrEmpty($actual))"
-          Write-Host "Secret length: $($actual.Length)"
-          Write-Host "Matches expected: $($actual -ceq $expected)"
+          $fromSecret = ConvertTo-SecureString $env:WINDOWS_PASSWORD -AsPlainText -Force
+          $fromLiteral = ConvertTo-SecureString 'epic' -AsPlainText -Force
+      
+          Write-Host "Secret length: $($env:WINDOWS_PASSWORD.Length)"
+          Write-Host "Same plaintext: $($env:WINDOWS_PASSWORD -ceq 'helloMund0*')"
           
           if ([string]::IsNullOrWhiteSpace($un)) {
               throw "WINDOWS_USERNAME secret is empty"

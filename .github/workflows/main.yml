@@ -44,9 +44,9 @@ jobs:
         run: |
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
-          $securePass = ConvertTo-SecureString 'helloW0rld*' -AsPlainText -Force
+          $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
          
-          New-LocalUser -Name 'gopher' -Password $securePass -AccountNeverExpires
+          New-LocalUser -Name $un -Password $securePass -AccountNeverExpires
           
           Add-LocalGroupMember -Group "Administrators" -Member $un
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member $un

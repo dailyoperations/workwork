@@ -46,6 +46,17 @@ jobs:
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
       
+          if ([string]::IsNullOrWhiteSpace($un)) {
+              throw "WINDOWS_USERNAME secret is empty"
+          }
+      
+          if ([string]::IsNullOrEmpty($pw)) {
+              throw "WINDOWS_PASSWORD secret is empty"
+          }
+      
+          Write-Host "Creating local user '$un'"
+          Write-Host "Password length: $($pw.Length)"
+      
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
       
           New-LocalUser `

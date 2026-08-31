@@ -38,20 +38,30 @@ jobs:
           Restart-Service -Name TermService -Force
 
       - name: Create User with Custom Password
+        shell: pwsh
+        env:
+          WINDOWS_USERNAME: ${{ secrets.WINDOWS_USERNAME }}
+          WINDOWS_PASSWORD: ${{ secrets.WINDOWS_PASSWORD }}
         run: |
-          $un = ${{ secrets.WINDOWS_USERNAME }}
-          $pw = ${{ secrets.WINDOWS_PASSWORD }}
-          $secureUsername = ConvertTo-SecureString $un -AsPlainText -Force
+          $un = $env:WINDOWS_USERNAME
+          $pw = $env:WINDOWS_PASSWORD
+      
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
-          
-          New-LocalUser -Name $secureUsername -Password $securePass -AccountNeverExpires
-          Add-LocalGroupMember -Group "Administrators" -Member $secureUsername
-          Add-LocalGroupMember -Group "Remote Desktop Users" -Member $secureUsername
-          
-          if (-not (Get-LocalUser -Name $secureUsername)) {
+      
+          New-LocalUser `
+            -Name $un `
+            -Password $securePass `
+            -AccountNeverExpires
+      
+          Add-LocalGroupMember -Group "Administrators" -Member $un
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member $un
+      
+          if (-not (Get-LocalUser -Name $un -ErrorAction SilentlyContinue)) {
               Write-Error "Error creating user"
               exit 1
           }
+      
+          Write-Host "User '$un' created successfully."
 
       - name: Install Tailscale
         run: |

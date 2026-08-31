@@ -44,7 +44,7 @@ jobs:
         run: |
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
-          $securePass = ConvertTo-SecureString 'epic' -AsPlainText -Force
+          $securePass = ConvertTo-SecureString 'helloW0rld*' -AsPlainText -Force
          
           New-LocalUser -Name 'gopher' -Password $securePass -AccountNeverExpires
           

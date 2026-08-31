@@ -38,7 +38,6 @@ jobs:
           Restart-Service -Name TermService -Force
 
       - name: Create User with Custom Password
-        shell: pwsh
         env:
           WINDOWS_USERNAME: ${{ secrets.WINDOWS_USERNAME }}
           WINDOWS_PASSWORD: ${{ secrets.WINDOWS_PASSWORD }}
@@ -46,26 +45,10 @@ jobs:
           net accounts
           $un = $env:WINDOWS_USERNAME
           $pw = $env:WINDOWS_PASSWORD
-          $fromSecret = ConvertTo-SecureString $env:WINDOWS_PASSWORD -AsPlainText -Force
-          $fromLiteral = ConvertTo-SecureString 'epic' -AsPlainText -Force
-      
-          Write-Host "Secret length: $($env:WINDOWS_PASSWORD.Length)"
-          Write-Host "Same plaintext: $($env:WINDOWS_PASSWORD -ceq 'epic')"
-          
-          if ([string]::IsNullOrWhiteSpace($un)) {
-              throw "WINDOWS_USERNAME secret is empty"
-          }
-      
-          if ([string]::IsNullOrEmpty($pw)) {
-              throw "WINDOWS_PASSWORD secret is empty"
-          }
-      
-          Write-Host "Creating local user '$un'"
-          Write-Host "Password length: $($pw.Length)"
       
           $securePass = ConvertTo-SecureString $pw -AsPlainText -Force
-      
-          New-LocalUser -Name $un -Password $securePass -AccountNeverExpires
+          
+          New-LocalUser -Name 'gopher' -Password $securePass -AccountNeverExpires
       
           Add-LocalGroupMember -Group "Administrators" -Member $un
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member $un
